@@ -1,26 +1,32 @@
 class Reducer
-  attr_reader :by_most_common_bit
-  def initialize(by_most_common_bit: true)
+  attr_reader :numbers, :position, :by_most_common_bit
+  def initialize(numbers, position = 0, by_most_common_bit: true)
+    @numbers = numbers
+    @position = position
     @by_most_common_bit = by_most_common_bit
   end
 
-  def reduce(numbers, position = 0)
-    return numbers.first if numbers.one?
+  def reduce
+    return numbers.first.join.to_i(2) if numbers.one?
 
+    Reducer.new(
+      select_by_criteria(most_common_bit),
+      position + 1,
+      by_most_common_bit: by_most_common_bit
+    ).reduce
+  end
+
+  def most_common_bit
     most_common_treshold = numbers.size / 2.to_f
     sum = numbers.map { |bits| bits[position] }.sum
-    bit_criteria = if sum == most_common_treshold
+    if sum == most_common_treshold
       1
     else
       sum > most_common_treshold ? 1 : 0
     end
-    reduce(
-      select_numbers_for_criteria(numbers, position, bit_criteria),
-      position + 1
-    )
   end
 
-  def select_numbers_for_criteria(numbers, position, bit_criteria)
+  def select_by_criteria(bit_criteria)
     unless by_most_common_bit
       bit_criteria = 1 - bit_criteria
     end
@@ -33,9 +39,9 @@ numbers = STDIN.readlines.map do |line|
 end
 
 oxygen_rate, co2_rate = [
-  Reducer.new(by_most_common_bit: true),
-  Reducer.new(by_most_common_bit: false)
-].map { |reducer| reducer.reduce(numbers).join.to_i(2) }
+  Reducer.new(numbers, by_most_common_bit: true),
+  Reducer.new(numbers, by_most_common_bit: false)
+].map { |reducer| reducer.reduce }
 
 puts "Oxygen generator rating: #{oxygen_rate}"
 puts "CO2 scrubber rating: #{co2_rate}"
