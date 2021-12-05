@@ -10,15 +10,15 @@ Segment = Struct.new(:from, :to) do
 
   def to_a
     if from.y == to.y
-      Range.new(*[from.x, to.x]).map do |x|
+      (from.x..to.x).map do |x|
         Point.new(x, from.y)
       end
     elsif from.x == to.x
-      Range.new(*[from.y, to.y]).map do |y|
+      (from.y..to.y).map do |y|
         Point.new(from.x, y)
       end
     else
-      Range.new(*[from.x, to.x]).map.with_index do |x, i|
+      (from.x..to.x).map.with_index do |x, i|
         if to.y < from.y
           Point.new(x, from.y - i)
         else
