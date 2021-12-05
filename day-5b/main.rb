@@ -3,6 +3,7 @@ require 'matrix'
 Point = Struct.new(:x, :y) do
   def to_s; "|#{x}.#{y}"; end
 end
+
 Segment = Struct.new(:from, :to) do
   def to_s
     "#{from.x},#{from.y} → #{to.x},#{to.y}"
