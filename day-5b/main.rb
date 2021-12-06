@@ -51,4 +51,4 @@ points = segments.each_with_object(Hash.new(0)) do |segment, points|
   end
 end
 
-puts "Overlapping points: #{points.select { |point, count| count > 1 }.size}"
+puts "Overlapping points: #{points.select { |_, count| count > 1 }.size}"
