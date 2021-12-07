@@ -1,4 +1,4 @@
-positions = STDIN.gets.split(',').map(&:to_i).sort
+positions = STDIN.gets.split(',').map(&:to_i)
 average = positions.sum(0.0) / positions.size
 fuel = [average.floor, average.ceil].map do |target|
   positions
