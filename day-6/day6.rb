@@ -1,4 +1,4 @@
-# Run with: `cat input.txt | ruby main.rb 80`
+# Run with: `cat input.txt | ruby day6.rb 80`
 days = ARGV.shift || 18
 fishes = STDIN.gets.split(',').map(&:to_i)
 counts_by_age = fishes.each_with_object(Hash.new(0)) { |e, h| h[e] += 1 }
