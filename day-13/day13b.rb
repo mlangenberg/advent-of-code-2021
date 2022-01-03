@@ -17,12 +17,10 @@ ARGF.each_line do |line|
 end
 
 def fold(dots, along)
-  dots.map do |dot|
-    if dot[along.axis] > along.line
-      dot[along.axis] = along.line - (dot[along.axis] - along.line)
-    end
-    dot
-  end
+  dots
+    .select { |dot| dot[along.axis] > along.line }
+    .each { |dot| dot[along.axis] = along.line - (dot[along.axis] - along.line) }
+  dots.uniq!
 end
 
 def print(dots)
@@ -35,8 +33,7 @@ def print(dots)
 end
 
 while (f = folds.shift)
-  dots = fold(dots, f).uniq
+  fold(dots, f)
 end
-
 
 print(dots)

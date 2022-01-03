@@ -17,12 +17,12 @@ ARGF.each_line do |line|
 end
 
 def fold(dots, along)
-  dots.map do |dot|
+  dots.each do |dot|
     if dot[along.axis] > along.line
       dot[along.axis] = along.line - (dot[along.axis] - along.line)
     end
-    dot
-  end
+  end.uniq!
 end
 
-puts fold(dots, folds.shift).uniq.count
+fold(dots, folds.shift)
+puts dots.count
