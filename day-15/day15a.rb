@@ -12,17 +12,12 @@ class Map < Matrix
   end
 
   def neighbors(point)
-    indices = [
+    [
       [point.row - 1, point.column], [point.row, point.column - 1],
       [point.row + 1, point.column], [point.row, point.column + 1]
-    ].select do |other_row, other_column|
-      [other_row, other_column].min >= 0 &&
-        other_row < row_count &&
-        other_column < column_count
-    end
-    indices.map do |other_row, other_column|
-      [Point[other_row, other_column], self[other_row, other_column]]
-    end
+    ]
+      .select { |row, col| [row, col].min >= 0 && row < row_count && col < column_count }
+      .map { |index| Point[*index] }
   end
 
   def distance(source, target)
@@ -40,10 +35,10 @@ class Map < Matrix
       queue.delete(current)
       return distance if current == target
 
-      neighbors(current).each do |point, length|
+      neighbors(current).each do |point|
         next unless queue.include?(point)
 
-        distance_to_neighbor = distance + length
+        distance_to_neighbor = distance + self[point.column, point.row]
         distances[point] = distance_to_neighbor if distance_to_neighbor < distances[point]
       end
     end
@@ -51,9 +46,5 @@ class Map < Matrix
   end
 end
 
-
 map = Map.rows(ARGF.readlines.map(&:chomp).map { |line| line.chars.map(&:to_i) })
-
-# binding.pry
-
 puts map.distance(map.first, map.last)
