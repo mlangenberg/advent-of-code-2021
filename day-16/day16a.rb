@@ -1,6 +1,16 @@
 Packet = Struct.new(:version, :type_id, :value,
                     :length_type_id, :packets_length, :packets,
                     keyword_init: true) do
+  self::OPERATIONS = {
+    0 => :+,
+    1 => :*,
+    2 => ->(a, b) { a < b ? a : b },
+    3 => ->(a, b) { a > b ? a : b },
+    5 => ->(a, b) { a > b ? 1 : 0 },
+    6 => ->(a, b) { a < b ? 1 : 0 },
+    7 => ->(a, b) { a == b ? 1 : 0 }
+  }.freeze
+
   def self.decode(input)
     packet = new(
       version: input.shift(3).join.to_i(2),
@@ -36,9 +46,14 @@ Packet = Struct.new(:version, :type_id, :value,
   def length_bits
     length_type_id.zero? ? 15 : 11
   end
+
+  def value
+    literal? ? self[:value] : packets.map(&:value).reduce(&Packet::OPERATIONS[type_id])
+  end
 end
 
 input = ARGF.read.chomp.chars.map { |c| format('%04d', c.to_i(16).to_s(2)) }.join.chars.map(&:to_i)
 packet = Packet.decode(input)
 sum = ->(f, packet) { packet.version + packet.packets.map { |p| sum.(f, p) }.sum }
-puts sum.(sum, packet)
+puts "Sum of all packet versions: #{sum.(sum, packet)}"
+puts "Packet value: #{packet.value}"
