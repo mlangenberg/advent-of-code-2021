@@ -14,32 +14,27 @@ Packet = Struct.new(:version, :type_id, :value,
       packet.value = value_bits.join.to_i(2)
     else
       packet.length_type_id = input.shift
-      length_bits = packet.length_type_id.zero? ? 15 : 11
-      packet.packets_length = input.shift(length_bits).join.to_i(2)
-      packet.packets = packet.decode(input)
+      packet.packets_length = input.shift(packet.length_bits).join.to_i(2)
+      packet.packets =
+        if packet.length_type_id.zero?
+          decode_packets(input.shift(packet.packets_length))
+        else
+          decode_packets(input, max: packet.packets_length)
+        end
     end
     packet
   end
 
-  def decode(input)
-    length_type_id.zero? ? decode_max_length(input) : decode_max_packets(input)
-  end
-
-  def decode_max_length(input)
-    bits = input.shift(packets_length)
-    packets = []
-    packets << Packet.decode(bits) until bits.empty?
-    packets
-  end
-
-  def decode_max_packets(input)
-    packets = []
-    packets << Packet.decode(input) until packets.size == packets_length
-    packets
+  def self.decode_packets(input, max: nil)
+    [].tap { |packets| packets << decode(input) until input.empty? || packets.size == max }
   end
 
   def literal?
     type_id == 4
+  end
+
+  def length_bits
+    length_type_id.zero? ? 15 : 11
   end
 end
 
