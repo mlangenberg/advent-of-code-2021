@@ -1,4 +1,4 @@
-numbers = STDIN.readlines.map do |line|
+numbers = ARGF.readlines.map do |line|
   line.scan(/\d/).map(&:to_i)
 end
 
@@ -10,7 +10,7 @@ gamma_rate_bits = Array.new(gamma_rate_length) do |i|
 end
 
 gamma_rate = gamma_rate_bits.join.to_i(2)
-epsilon_rate = gamma_rate ^ (2 ** gamma_rate_length -1)
+epsilon_rate = gamma_rate ^ (2**gamma_rate_length - 1)
 
 puts "Gamma rate: #{gamma_rate}"
 puts "Epsilon rate: #{epsilon_rate}"

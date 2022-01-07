@@ -5,7 +5,7 @@ ARGF.each_line do |line|
   @connections[to] << from
 end
 
-def explore(current, path = [], paths = [], allow_lowercase_node_twice = true)
+def explore(current, path = [], paths = [], allow_lowercase_node_twice: true)
   paths << path.push(:end) and return if current == :end
 
   @connections[current].each do |node|
@@ -14,9 +14,9 @@ def explore(current, path = [], paths = [], allow_lowercase_node_twice = true)
     if node =~ /^[[:lower:]]+$/ && path.include?(node)
       next unless allow_lowercase_node_twice
 
-      explore(node, path.dup.push(current), paths, false)
+      explore(node, path.dup.push(current), paths, allow_lowercase_node_twice: false)
     else
-      explore(node, path.dup.push(current), paths, allow_lowercase_node_twice)
+      explore(node, path.dup.push(current), paths, allow_lowercase_node_twice:)
     end
   end
 

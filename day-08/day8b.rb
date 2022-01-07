@@ -1,25 +1,20 @@
-def Patterns(patterns)
-  Patterns.new(patterns.map(&:chars).map(&:sort))
-end
-
 class Patterns
   include Enumerable
 
-  def initialize(list)
-    @list = list
-  end
-
-  def each(&block)
-    @list.each(&block)
-  end
+  def initialize(list) = @list = list
+  def each(&) = @list.each(&)
 
   def by_count(count)
     Patterns.new(select { |pattern| pattern.size == count })
   end
 
   def containing(pattern, except: 0)
-    select { |other| (pattern-other).size == except }
+    select { |other| (pattern - other).size == except }
   end
+end
+
+def patterns(patterns)
+  Patterns.new(patterns.map(&:chars).map(&:sort))
 end
 
 def deduce(segments)
@@ -38,9 +33,9 @@ def deduce(segments)
 end
 
 sum = 0
-STDIN.each_line do |line|
-  patterns, output = line.split(' | ').map(&:split)
-  mapping = deduce(Patterns(patterns))
-  sum += Patterns(output).map { |pattern| mapping[pattern] }.join.to_i
+ARGF.each_line do |line|
+  input, output = line.split(' | ').map(&:split)
+  mapping = deduce(patterns(input))
+  sum += patterns(output).map { |pattern| mapping[pattern] }.join.to_i
 end
 puts "Sum of output values #{sum}"

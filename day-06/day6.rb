@@ -1,6 +1,6 @@
-# Run with: `cat input.txt | ruby day6.rb 80`
+# Run with: `ruby day6.rb input.txt 80` for 80 iterations
+fishes = ARGF.gets.split(',').map(&:to_i)
 days = ARGV.shift || 18
-fishes = STDIN.gets.split(',').map(&:to_i)
 counts_by_age = fishes.each_with_object(Hash.new(0)) { |e, h| h[e] += 1 }
 
 days.to_i.times do |day|

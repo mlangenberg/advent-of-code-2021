@@ -1,9 +1,9 @@
 TOKENS = {
   '[' => ']', '(' => ')', '{' => '}', '<' => '>'
-}
+}.freeze
 SYNTAX_ERROR_SCORES = {
-  ')' => 3, ']' => 57, '}' => 1197, '>' => 25137
-}
+  ')' => 3, ']' => 57, '}' => 1197, '>' => 25_137
+}.freeze
 
 syntax_error_score = 0
 ARGF.each_line do |line|

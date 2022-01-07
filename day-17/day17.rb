@@ -3,9 +3,7 @@ Rect = Struct.new(:left, :right, :bottom, :top) do
     point.x.between?(left, right) && point.y.between?(bottom, top)
   end
 
-  def behind?(point)
-    point.x > right || point.y < bottom
-  end
+  def behind?(point) = point.x > right || point.y < bottom
 end
 
 Point = Struct.new(:x, :y)
@@ -41,4 +39,3 @@ end
 
 puts "Max height: #{probes.map(&:max_height).max}"
 puts "probes: #{probes.count}"
-

@@ -1,5 +1,6 @@
 class Reducer
   attr_reader :numbers, :position, :by_most_common_bit
+
   def initialize(numbers, position = 0, by_most_common_bit: true)
     @numbers = numbers
     @position = position
@@ -12,7 +13,7 @@ class Reducer
     Reducer.new(
       select_by_criteria(most_common_bit),
       position + 1,
-      by_most_common_bit: by_most_common_bit
+      by_most_common_bit:
     ).reduce
   end
 
@@ -27,21 +28,19 @@ class Reducer
   end
 
   def select_by_criteria(bit_criteria)
-    unless by_most_common_bit
-      bit_criteria = 1 - bit_criteria
-    end
+    bit_criteria = 1 - bit_criteria unless by_most_common_bit
     numbers.select { |bits| bits[position] == bit_criteria }
   end
 end
 
-numbers = STDIN.readlines.map do |line|
+numbers = ARGF.readlines.map do |line|
   line.scan(/\d/).map(&:to_i)
 end
 
 oxygen_rate, co2_rate = [
   Reducer.new(numbers, by_most_common_bit: true),
   Reducer.new(numbers, by_most_common_bit: false)
-].map { |reducer| reducer.reduce }
+].map(&:reduce)
 
 puts "Oxygen generator rating: #{oxygen_rate}"
 puts "CO2 scrubber rating: #{co2_rate}"

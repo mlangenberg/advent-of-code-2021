@@ -1,9 +1,9 @@
 TOKENS = {
   '[' => ']', '(' => ')', '{' => '}', '<' => '>'
-}
+}.freeze
 AUTOCOMPLETE_SCORES = {
   ')' => 1, ']' => 2, '}' => 3, '>' => 4
-}
+}.freeze
 
 scores = []
 ARGF.each_line do |line|

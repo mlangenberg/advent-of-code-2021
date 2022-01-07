@@ -1,11 +1,9 @@
 Point = Struct.new(:x, :y) do
-  def to_s; "|#{x}.#{y}"; end
+  def to_s = "|#{x}.#{y}"
 end
 
 Segment = Struct.new(:from, :to) do
-  def to_s
-    "#{from.x},#{from.y} → #{to.x},#{to.y}"
-  end
+  def to_s = "#{from.x},#{from.y} → #{to.x},#{to.y}"
 
   def to_a
     if from.y == to.y
@@ -29,18 +27,18 @@ Segment = Struct.new(:from, :to) do
 end
 
 segments = []
-STDIN.each_line do |line|
-  if match = line.match(/(?<x1>\d+),(?<y1>\d+) -> (?<x2>\d+),(?<y2>\d+)/)
-    segments << Segment.new(*[
-      Point.new(match[:x1].to_i, match[:y1].to_i),
-      Point.new(match[:x2].to_i, match[:y2].to_i)
-    ].sort_by { |point| [point.x, point.y] })
-  end
+ARGF.each_line do |line|
+  next unless (match = line.match(/(?<x1>\d+),(?<y1>\d+) -> (?<x2>\d+),(?<y2>\d+)/))
+
+  segments << Segment.new(*[
+    Point.new(match[:x1].to_i, match[:y1].to_i),
+    Point.new(match[:x2].to_i, match[:y2].to_i)
+  ].sort_by { |point| [point.x, point.y] })
 end
 
 if $VERBOSE
   segments.each do |segment|
-    puts segment.to_s + " " + segment.to_a.join(&:to_s)
+    puts "#{segment} #{segment.to_a.join}"
   end
   puts
 end

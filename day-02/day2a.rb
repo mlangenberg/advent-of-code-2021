@@ -1,6 +1,6 @@
-position = Struct.new(:depth, :distance).new(0,0)
+position = Struct.new(:depth, :distance).new(0, 0)
 
-STDIN.each_line do |line|
+ARGF.each_line do |line|
   command, units = line.split
   case command
   when 'forward'

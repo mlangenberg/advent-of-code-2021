@@ -1,11 +1,12 @@
 require 'matrix'
 
-random_numbers = STDIN.gets.chomp.split(',')
+random_numbers = ARGF.gets.chomp.split(',')
 
 boards = []
 rows = []
-STDIN.each_line do |line|
+ARGF.each_line do |line|
   next if line.chomp.empty?
+
   rows << line.scan(/\d{1,2}/)
   if rows.size == 5
     boards << Matrix.rows(rows)
@@ -17,15 +18,15 @@ Bingo = Struct.new(:board, :number)
 bingos = []
 
 random_numbers.each do |number|
-  boards.dup.each_with_index do |board|
+  boards.dup.each do |board|
     board.each_with_index do |e, row, col|
-      if e == number
-        board[row,col] = nil
-        [*board.row_vectors, *board.column_vectors].each do |vector|
-          if vector.to_a.none?
-            bingos << Bingo.new(board, number)
-            boards.delete(board)
-          end
+      next unless e == number
+
+      board[row, col] = nil
+      [*board.row_vectors, *board.column_vectors].each do |vector|
+        if vector.to_a.none?
+          bingos << Bingo.new(board, number)
+          boards.delete(board)
         end
       end
     end

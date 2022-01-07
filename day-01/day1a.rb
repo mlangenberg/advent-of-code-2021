@@ -1,10 +1,8 @@
 increases = 0
 previous_measurement = nil
-STDIN.each_line do |line|
-	measurement = line.to_i
-  if previous_measurement
-    increases += 1 if measurement > previous_measurement
-  end
+ARGF.each_line do |line|
+  measurement = line.to_i
+  increases += 1 if previous_measurement && measurement > previous_measurement
   previous_measurement = measurement
 end
 puts increases

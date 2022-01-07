@@ -4,13 +4,8 @@ require 'pairing_heap'
 Point = Struct.new(:row, :column)
 
 class Map < Matrix
-  def first
-    Point[0, 0]
-  end
-
-  def last
-    Point[row_count - 1, column_count - 1]
-  end
+  def first = Point[0, 0]
+  def last = Point[row_count - 1, column_count - 1]
 
   def neighbors(point)
     [

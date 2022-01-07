@@ -39,13 +39,8 @@ Packet = Struct.new(:version, :type_id, :value,
     [].tap { |packets| packets << decode(input) until input.empty? || packets.size == max }
   end
 
-  def literal?
-    type_id == 4
-  end
-
-  def length_bits
-    length_type_id.zero? ? 15 : 11
-  end
+  def literal? = type_id == 4
+  def length_bits = length_type_id.zero? ? 15 : 11
 
   def value
     literal? ? self[:value] : packets.map(&:value).reduce(&Packet::OPERATIONS[type_id])
