@@ -2,6 +2,5 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
-
+gem "matrix", "~> 0.4.2"
 gem "pairing_heap", "~> 0.1.0"

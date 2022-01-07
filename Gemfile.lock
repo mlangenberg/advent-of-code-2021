@@ -1,12 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    matrix (0.4.2)
     pairing_heap (0.1.0)
 
 PLATFORMS
   x86_64-darwin-21
 
 DEPENDENCIES
+  matrix (~> 0.4.2)
   pairing_heap (~> 0.1.0)
 
 BUNDLED WITH
