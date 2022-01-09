@@ -26,7 +26,7 @@ end
 
 def enhance(image)
   output = Hash.new(ALGORITHM[0].nonzero? && image.default.zero? ? 1 : 0)
-  range = image.keys.min.min - 2..image.keys.max.max + 2
+  range = image.keys.min.min - 1..image.keys.max.max + 1
   range.to_a.repeated_permutation(2).each do |row, column|
     output[[row, column]] = enhanced_pixel(image, row, column)
   end
