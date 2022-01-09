@@ -1,12 +1,17 @@
+# Run with: `ruby day20.rb input.txt 50` for 50 iterations
 PIXELS = {
   '.' => 0,
   '#' => 1
 }.freeze
 
-ALGORITHM = ARGF.gets.chomp.gsub(/./, PIXELS).chars.map(&:to_i)
-ARGF.gets # skip line
+file = ARGF.file
+STEPS = (ARGV.shift || 2).to_i
+ALGORITHM = file.gets.chomp.gsub(/./, PIXELS).chars.map(&:to_i)
 
-input = ARGF.readlines.map(&:chomp).map { |line| line.gsub(/./, PIXELS).chars.map(&:to_i) }
+file.gets # skip line
+
+input = file.readlines.map(&:chomp).map { |line| line.gsub(/./, PIXELS).chars.map(&:to_i) }
+file.close
 
 image = input.each_with_index.each_with_object(Hash.new(0)) do |(pixels, row), hash|
   pixels.each_with_index { |pixel, column| hash[[row, column]] = pixel }
@@ -20,12 +25,11 @@ def enhanced_pixel(image, row, column)
 end
 
 def enhance(image)
-  output = image.dup
-  range = image.keys.min.min - 4..image.keys.max.max + 4
+  output = Hash.new(ALGORITHM[0].nonzero? && image.default.zero? ? 1 : 0)
+  range = image.keys.min.min - 2..image.keys.max.max + 2
   range.to_a.repeated_permutation(2).each do |row, column|
     output[[row, column]] = enhanced_pixel(image, row, column)
   end
-  output.default = output.default.zero? ? 1 : 0 unless ALGORITHM[0].zero?
   output
 end
 
@@ -39,7 +43,7 @@ def print(image)
 end
 
 print(image) if $VERBOSE
-2.times do
+STEPS.times do
   image = enhance(image)
   print(image) if $VERBOSE
 end
